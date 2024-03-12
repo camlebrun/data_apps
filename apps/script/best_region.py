@@ -18,7 +18,7 @@ class RegionTable:
         customers_with_orders = pd.merge(customers_rd, order_list_rd, left_on='customer_id', right_on='customer_id')
       
       #  Second Left join add the payment info to the previous join
-      customers_with_complete = pd.merge(customers_with_orders, payment_type_rd, left_on='order_id', right_on='order_id')
+        customers_with_complete = pd.merge(customers_with_orders, payment_type_rd, left_on='order_id', right_on='order_id')
 
 
         return customers_with_complete
@@ -29,6 +29,9 @@ class RegionTable:
         # Group by to have the list of scel
         sales_per_state = customers_with_complete.groupby('customer_state')['payment_value'].sum().reset_index()
         sales_per_state=sales_per_state.sort_values(by='payment_value', ascending=False)
+
+        #Formating the ammount to the local currency
+        sales_per_state['payment_value']=sales_per_state['payment_value'].map("R${:,.0f}K".format)
 
         # Displaying the total sales per state
         print(sales_per_state)
