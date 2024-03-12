@@ -16,18 +16,39 @@ class CleanPayments:
         voucher_amounts = voucher_payments.groupby('order_id')['payment_value'].sum().reset_index()
         voucher_amounts.rename(columns={'payment_value': 'payment_value_voucher'}, inplace=True)
 
+
         # Merge the voucher amounts into the original dataframe
         df = pd.merge(df, voucher_amounts, on="order_id", how="left")
-
+        # Add order information
+        df_orders = pd.read_csv('data/olist_orders_dataset.csv')
+        df = pd.merge(df, df_orders, on="order_id", how="left")
+        df_custumer = pd.read_csv('data/olist_customers_dataset.csv')
+       
+        # Merge the voucher amounts into the original dataframe
+        df = pd.merge(df, df_custumer, on="customer_id", how="left")
+        print(df.head())
         # Group by order_id and aggregate other columns
         final_df = df.groupby('order_id').agg({
-            'payment_sequential': 'first',
+            'customer_id': 'first',
+            'order_status': 'last',
+            'order_purchase_timestamp': 'first',
+            'order_approved_at': 'first',
+            'order_delivered_carrier_date': 'first',
+            'order_delivered_customer_date': 'first',
+            'order_estimated_delivery_date': 'first',
             'payment_type': 'first',
             'payment_installments': 'first',
             'payment_value': 'sum',
             'have_voucher': 'first',
-            'payment_value_voucher': 'first'
+            'payment_value_voucher': 'first',
+            'customer_unique_id': 'first',
+            'customer_zip_code_prefix': 'first',
+            'customer_city': 'first',
+            'customer_state': 'first'
+    
         }).reset_index()
+        print(final_df.head())
+
 
         return final_df
 
@@ -40,3 +61,6 @@ class CleanPayments:
         return {'Total Orders': total_orders, 'Total Payment': total_payment, 'Average Payment': average_payment}
 
 
+import pandas as pd
+df_payments = pd.read_csv('data/olist_order_payments_dataset.csv')
+cleaned_df = CleanPayments.clean(df_payments)
