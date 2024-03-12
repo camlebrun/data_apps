@@ -26,7 +26,7 @@ class CleanPayments:
        
         # Merge the voucher amounts into the original dataframe
         df = pd.merge(df, df_custumer, on="customer_id", how="left")
-        print(df.head())
+
         # Group by order_id and aggregate other columns
         final_df = df.groupby('order_id').agg({
             'customer_id': 'first',
@@ -47,7 +47,6 @@ class CleanPayments:
             'customer_state': 'first'
     
         }).reset_index()
-        print(final_df.head())
 
 
         return final_df
