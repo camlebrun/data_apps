@@ -1,5 +1,3 @@
-import pandas as pd
-    
 class CleanPayments:
     @staticmethod
     def clean(df):
@@ -27,10 +25,18 @@ class CleanPayments:
             'payment_type': 'first',
             'payment_installments': 'first',
             'payment_value': 'sum',
-            'have_voucher': 'last',
+            'have_voucher': 'first',
             'payment_value_voucher': 'first'
         }).reset_index()
 
         return final_df
 
-# Read the CSV file into a DataFrame
+    @staticmethod
+    def kpi(df):
+        total_orders = len(df)
+        total_payment = df['payment_value'].sum()
+        average_payment = df['payment_value'].mean()
+
+        return {'Total Orders': total_orders, 'Total Payment': total_payment, 'Average Payment': average_payment}
+
+
