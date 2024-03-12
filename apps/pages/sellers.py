@@ -7,7 +7,7 @@ st.set_page_config(page_title='Sellers', layout='wide')
 
 st.title('Sellers Table')
 sellers_table = SellersTable()
-cleaned_sellers_df = sellers_table.clean(sellers_table.df_items, sellers_table.df_sellers)
+cleaned_sellers_df = sellers_table.clean(sellers_table.df_items)
 sellers_kpi = sellers_table.kpi(cleaned_sellers_df)
 
 col_1, col_2 = st.columns(2)
@@ -33,6 +33,19 @@ fig = px.bar(SellersTable.kpi(cleaned_sellers_df)['Count seller state']
                 , title='Top 10 Cities'
                 , labels={'x':'City', 'y':'Items'}
                 )
+fig.update_layout(xaxis={'categoryorder':'total descending'})
 st.plotly_chart(fig, use_container_width=True)
-
-
+ 
+# fig city seller
+fig = px.bar(SellersTable.kpi(cleaned_sellers_df)['Count seller city']
+                , x=SellersTable.kpi(cleaned_sellers_df)['Count seller city'].index
+                , y=SellersTable.kpi(cleaned_sellers_df)['Count seller city'].values
+                , title='Top 100 Cities'
+                , labels={'x':'City', 'y':'Items'}
+                )
+fig.update_layout(xaxis={'categoryorder':'total descending'})
+df_geo = pd.read_csv('data/olist_geolocation_dataset.csv')
+cleaned_sellers_df = pd.merge(cleaned_sellers_df, df_geo, left_on='seller_state', right_on='geolocation_state', how='inner')
+# create a map
+fig = px.scatter_geo(cleaned_sellers_df, lat='geolocation_lat', lon='geolocation_lng', color='seller_state', size='price', projection='natural earth', title='Sellers by State')
+st.plotly_chart(fig, use_container_width=True)

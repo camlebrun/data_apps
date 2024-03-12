@@ -12,4 +12,3 @@ payment_data = analysis.payments
 # Call the calculate_rfm method with the payment data
 rfm_data = analysis.calculate_rfm(payment_data)
 st.dataframe(rfm_data)
-e
