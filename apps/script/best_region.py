@@ -1,4 +1,4 @@
-class RegionTable:
+class BestRegion:
     @staticmethod
     def clean(df):
         import pandas as pd
