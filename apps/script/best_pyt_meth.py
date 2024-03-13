@@ -15,7 +15,7 @@ class BestPayMeth:
         # Group by to have the list of 
         
         paym_type=payment_type_rd.groupby('payment_type')['order_id'].count()
-        paym_type=payment_type_rd.map("R${:,.0f}K".format)
+        paym_type=payment_type_rd
 
         # Displaying the payment type per payment mean
         print(paym_type)
