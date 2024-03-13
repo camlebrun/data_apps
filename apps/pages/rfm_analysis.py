@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from apps.script.gold.rfm import RFMAnalysis
+from script.gold.rfm import RFMAnalysis
 
 # Load the data
 df = pd.read_csv('data/cleaned_payments.csv')
