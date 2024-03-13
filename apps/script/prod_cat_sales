@@ -38,12 +38,14 @@ class ProdCatSales:
       # Creating the product category viz
         prod_cat_sales_viz = pd.merge(cln_inv,customers_with_complete, left_on='order_id', right_on='order_id')
       #Getting rid of the NaN
-      prod_cat_sales_viz_clean=prod_cat_sales_viz.dropna()
-       
-      
+        prod_cat_sales_viz_clean=prod_cat_sales_viz.dropna()
+
+      #Merging with the customers_with_complete to have an outlook of the sales next to the category
+
+        prod_cat_ord = pd.merge(customers_with_complete, prod_cat_sales_viz_clean, left_on='order_id', right_on='order_id')
 
       
-        return prod_cat_sales_viz_clean
+        return prod_cat_ord
     @staticmethod
     def kpi(df):
 
@@ -69,14 +71,16 @@ class ProdCatSales:
           return 'Other'  # Default category if no match found
       
       # Apply the function to create a new column with custom categories
-      prod_cat_sales_viz_clean['custom_category'] = prod_cat_sales_viz_clean['product_category_name'].apply(map_custom_category)
+     prod_cat_ord['custom_category'] = prod_cat_ord['product_category_name'].apply(map_custom_category)
       
       # Group by custom category and count the number of occurrences
-      grouped_counts = prod_cat_sales_viz_clean.groupby('custom_category').size().reset_index(name='count')
+      #grouped_counts = prod_cat_ord.groupby('custom_category').size().reset_index(name='count')
+
+      ae=prod_cat_ord.groupby('custom_category')['payment_value_y'].sum().reset_index()
+      ae.sort_values(by='payment_value_y',ascending=False)
       
-      
 
 
 
 
-        return {'Order Per Category': grouped_counts.sort_values(by='count',ascending=False)}
+        return {'Order Sales Per Category':ae )}
