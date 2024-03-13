@@ -44,8 +44,3 @@ fig = px.bar(SellersTable.kpi(cleaned_sellers_df)['Count seller city']
                 , labels={'x':'City', 'y':'Items'}
                 )
 fig.update_layout(xaxis={'categoryorder':'total descending'})
-df_geo = pd.read_csv('data/olist_geolocation_dataset.csv')
-cleaned_sellers_df = pd.merge(cleaned_sellers_df, df_geo, left_on='seller_state', right_on='geolocation_state', how='inner')
-# create a map
-fig = px.scatter_geo(cleaned_sellers_df, lat='geolocation_lat', lon='geolocation_lng', color='seller_state', size='price', projection='natural earth', title='Sellers by State')
-st.plotly_chart(fig, use_container_width=True)
