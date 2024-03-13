@@ -26,7 +26,7 @@ class BestRegion:
     def kpi(df):
 
         
-        # Group by to have the list of scel
+        # Group by to have the list of sales per states
         sales_per_state = customers_with_complete.groupby('customer_state')['payment_value'].sum().reset_index()
         sales_per_state=sales_per_state.sort_values(by='payment_value', ascending=False)
 
