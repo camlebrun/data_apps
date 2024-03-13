@@ -12,7 +12,7 @@ class MostCutReg:
         order_list = "data/olist_orders_dataset.csv"
         order_list_rd = pd.read_csv(order_list)
       
-       # First Left join in order to have the orders and the customers on the same dataframe
+       # Left join in order to have the orders and the customers on the same dataframe
         customers_with_orders = pd.merge(customers_rd, order_list_rd, left_on='customer_id', right_on='customer_id')
      
         return customers_with_order
