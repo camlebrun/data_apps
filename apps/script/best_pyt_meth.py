@@ -23,4 +23,4 @@ class BestPayMeth:
 
 
 
-        return {'Sales per states': sales_per_state}
+        return {'Payment type usage ': paym_type}
