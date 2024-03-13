@@ -14,10 +14,10 @@ class BestPayMeth:
         
         # Group by to have the list of 
         
-        paym_type=payment_type_rd.groupby('payment_type')['payment_value'].sum().reset_index()
+        paym_type=payment_type_rd.groupby('payment_type')['order_id'].count()
+        paym_type=payment_type_rd.map("R${:,.0f}K".format)
 
-
-        # Displaying the total sales per state
+        # Displaying the payment type per payment mean
         print(paym_type)
 
 
