@@ -3,12 +3,16 @@ from script.gold.gold_payments import KpiCalculator
 import pandas as pd
 
 # Function to calculate metrics and display them
+
+
 def calculate_and_display_metrics(start_date, end_date):
     calculator = KpiCalculator('data/cleaned_payments.csv')
     # Calculate revenues and orders for the selected custom period
-    revenues, orders = calculator.revenues_and_orders_per_custom_period(period='year', start=start_date, end=end_date)
+    revenues, orders = calculator.revenues_and_orders_per_custom_period(
+        period='year', start=start_date, end=end_date)
 
-    # Calculate total revenue and orders for each year within the selected range
+    # Calculate total revenue and orders for each year within the selected
+    # range
     total_revenues = {index.year: value for index, value in revenues.items()}
     total_orders = {index.year: value for index, value in orders.items()}
 
@@ -20,33 +24,39 @@ def calculate_and_display_metrics(start_date, end_date):
 
     # Calculate the difference and percentage difference for revenues
     revenue_diff = revenue_end_date - revenue_start_date
-    percentage_revenue_diff = (revenue_diff / revenue_start_date) * 100 if revenue_start_date != 0 else 0
+    percentage_revenue_diff = (
+        revenue_diff / revenue_start_date) * 100 if revenue_start_date != 0 else 0
 
     # Calculate the difference and percentage difference for orders
     order_diff = order_end_date - order_start_date
-    percentage_order_diff = (order_diff / order_start_date) * 100 if order_start_date != 0 else 0
+    percentage_order_diff = (order_diff / order_start_date) * \
+        100 if order_start_date != 0 else 0
 
     # Display metrics with difference and percentage difference
     col1, col2 = st.columns(2)
     with col1:
-        st.write('### Revenue') 
-        st.metric(label=f" {end_date} VS {start_date}", 
-                  value=revenue_diff, 
+        st.write('### Revenue')
+        st.metric(label=f" {end_date} VS {start_date}",
+                  value=revenue_diff,
                   delta=f"{percentage_revenue_diff:.2f}%")
     with col2:
         st.write('### Orders')
-        st.metric(label=f" {end_date} VS {start_date}", 
-                  value=order_diff, 
+        st.metric(label=f" {end_date} VS {start_date}",
+                  value=order_diff,
                   delta=f"{percentage_order_diff:.2f}%")
 
 # Main function
+
+
 def main():
     # Create an instance of the KpiCalculator class
     calculator = KpiCalculator('data/cleaned_payments.csv')
 
     # Convert minimum and maximum dates to datetime
-    min_date = pd.to_datetime(calculator.data['order_purchase_timestamp'].min())
-    max_date = pd.to_datetime(calculator.data['order_purchase_timestamp'].max())
+    min_date = pd.to_datetime(
+        calculator.data['order_purchase_timestamp'].min())
+    max_date = pd.to_datetime(
+        calculator.data['order_purchase_timestamp'].max())
 
     # Streamlit page configuration
     st.set_page_config(page_title='Year-over-Year Analysis', layout='wide')
@@ -70,6 +80,7 @@ def main():
 
     # Calculate and display metrics
     calculate_and_display_metrics(start_date, end_date)
+
 
 if __name__ == "__main__":
     main()

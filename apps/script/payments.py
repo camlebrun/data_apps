@@ -32,8 +32,12 @@ state_dict = {
     'SC': 'Santa Catarina'
 }
 
+
 class CleanPayments:
-    def __init__(self, payments_path='data/olist_order_payments_dataset.csv', last_index_file='last_index_payments.txt'):
+    def __init__(
+            self,
+            payments_path='data/olist_order_payments_dataset.csv',
+            last_index_file='last_index_payments.txt'):
         self.df_payments = pd.read_csv(payments_path)
         self.last_index_file = last_index_file
         self.last_index = self.load_last_index()
@@ -58,7 +62,9 @@ class CleanPayments:
             print("No new data to process.")
             return
         cleaned_df = self.clean(new_data)
-        self.save_last_index(self.last_index + len(new_data))  # Update the last index
+        self.save_last_index(
+            self.last_index +
+            len(new_data))  # Update the last index
         print("Incremental update completed.")
 
     def retrieve_new_data(self):
@@ -76,8 +82,12 @@ class CleanPayments:
         df['have_voucher'] = df['payment_type'] == 'voucher'
 
         # Calculate voucher amount per order
-        voucher_amounts = voucher_payments.groupby('order_id')['payment_value'].sum().reset_index()
-        voucher_amounts.rename(columns={'payment_value': 'payment_value_voucher'}, inplace=True)
+        voucher_amounts = voucher_payments.groupby(
+            'order_id')['payment_value'].sum().reset_index()
+        voucher_amounts.rename(
+            columns={
+                'payment_value': 'payment_value_voucher'},
+            inplace=True)
 
         # Merge the voucher amounts into the original dataframe
         df = pd.merge(df, voucher_amounts, on="order_id", how="left")
@@ -113,6 +123,7 @@ class CleanPayments:
 
         final_df.to_csv('data/cleaned_payments.csv', index=False)
         return final_df
+
 
 if __name__ == "__main__":
     clean_payments = CleanPayments()

@@ -23,20 +23,20 @@ with col_1:
     st.metric('Total Sellers', sellers_kpi['Total Sellers'])
     st.metric('Total Items', sellers_kpi['Total Items'])
 with col_2:
-    st.metric('Average Items per Seller', sellers_kpi['Average Items per Seller'])
+    st.metric('Average Items per Seller',
+              sellers_kpi['Average Items per Seller'])
 
 # Plot top 10 sellers
 fig_top_10_sellers = px.bar(x=sellers_kpi['Count seller'].index,
                             y=sellers_kpi['Count seller'].values,
                             title='Top 10 Sellers',
-                            labels={'x':'Seller ID', 'y':'Items'})
+                            labels={'x': 'Seller ID', 'y': 'Items'})
 st.plotly_chart(fig_top_10_sellers, use_container_width=True)
 
 # Plot top 10 cities
 fig_top_10_cities = px.bar(x=sellers_kpi['Count seller state'].index,
                            y=sellers_kpi['Count seller state'].values,
                            title='Top 10 State',
-                           labels={'x':'State', 'y':'Items'})
-fig_top_10_cities.update_layout(xaxis={'categoryorder':'total descending'})
+                           labels={'x': 'State', 'y': 'Items'})
+fig_top_10_cities.update_layout(xaxis={'categoryorder': 'total descending'})
 st.plotly_chart(fig_top_10_cities, use_container_width=True)
-

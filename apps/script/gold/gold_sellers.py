@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 class KpiSellers:
     def __init__(self, data_path):
         self.data = pd.read_csv(data_path)
@@ -20,7 +21,8 @@ class KpiSellers:
     def kpi(df):
         total_sellers = len(df['seller_id'].unique())
         total_items = len(df)
-        average_items_per_seller = df.groupby('seller_id').size().mean().astype(int)
+        average_items_per_seller = df.groupby(
+            'seller_id').size().mean().astype(int)
         count_seller = df['seller_id'].value_counts().head(10)
         sum_price = df.groupby('seller_state')['price'].sum()
         count_seller_state = df['seller_state'].value_counts().head(1000)

@@ -1,8 +1,42 @@
 import pandas as pd
 import os
 
+state_dict = {
+    'SP': 'São Paulo',
+    'RN': 'Rio Grande do Norte',
+    'AC': 'Acre',
+    'RJ': 'Rio de Janeiro',
+    'ES': 'Espírito Santo',
+    'MG': 'Minas Gerais',
+    'BA': 'Bahia',
+    'SE': 'Sergipe',
+    'PE': 'Pernambuco',
+    'AL': 'Alagoas',
+    'PB': 'Paraíba',
+    'CE': 'Ceará',
+    'PI': 'Piauí',
+    'MA': 'Maranhão',
+    'PA': 'Pará',
+    'AP': 'Amapá',
+    'AM': 'Amazonas',
+    'RR': 'Roraima',
+    'DF': 'Distrito Federal',
+    'GO': 'Goiás',
+    'RO': 'Rondônia',
+    'TO': 'Tocantins',
+    'MT': 'Mato Grosso',
+    'MS': 'Mato Grosso do Sul',
+    'RS': 'Rio Grande do Sul',
+    'PR': 'Paraná',
+    'SC': 'Santa Catarina'
+}
 class SellersTable:
-    def __init__(self, items_path='data/olist_order_items_dataset.csv', sellers_path='data/olist_sellers_dataset.csv', geo_path='data/olist_geolocation_dataset.csv', last_index_file='last_index.txt'):
+    def __init__(
+            self,
+            items_path='data/olist_order_items_dataset.csv',
+            sellers_path='data/olist_sellers_dataset.csv',
+            geo_path='data/olist_geolocation_dataset.csv',
+            last_index_file='last_index.txt'):
         self.df_items = pd.read_csv(items_path)
         self.df_sellers = pd.read_csv(sellers_path)
         self.df_geo = pd.read_csv(geo_path)
@@ -41,6 +75,7 @@ class SellersTable:
 
     def clean(self, df):
         cleaned_df = pd.merge(df, self.df_sellers, on="seller_id", how="left")
+        cleaned_df= cleaned_df['seller_state'].map(state_dict)
         cleaned_df.to_csv('data/cleaned_sellers.csv', index=False)
         return cleaned_df
 
