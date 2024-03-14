@@ -28,7 +28,7 @@ for key, value in result.items():
 st.header('Sales per state')
 result = calculator.best_region()
 sales_per_state = result['Sales per state']
-fig = px.bar(sales_per_state, x='customer_state', y='payment_value', title='Sales per State', labels={'payment_value': 'Payment Value'})
+fig = px.bar(sales_per_state, x=customer_state.index, y='payment_value', title='Sales per State', labels={'payment_value': 'Payment Value'})
 st.plotly_chart(fig, use_container_width=True)
 
 # Displaying Customers per State as a bar chart
