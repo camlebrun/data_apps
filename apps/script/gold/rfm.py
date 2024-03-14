@@ -1,24 +1,33 @@
 import pandas as pd
 
+
 class RFMAnalysis:
     def __init__(self, df_data):
         self.df_data = df_data
-        self.df_data['order_purchase_timestamp'] = pd.to_datetime(self.df_data['order_purchase_timestamp'])
+        self.df_data['order_purchase_timestamp'] = pd.to_datetime(
+            self.df_data['order_purchase_timestamp'])
 
     def calculate_recency(self):
-        recency = self.df_data.groupby('customer_unique_id', as_index=False)['order_purchase_timestamp'].max()
-        recency.rename(columns={'order_purchase_timestamp': 'LastPurchaseDate'}, inplace=True)
+        recency = self.df_data.groupby('customer_unique_id', as_index=False)[
+            'order_purchase_timestamp'].max()
+        recency.rename(
+            columns={
+                'order_purchase_timestamp': 'LastPurchaseDate'},
+            inplace=True)
         recent_date = self.df_data['order_purchase_timestamp'].dt.date.max()
-        recency['Recency'] = recency['LastPurchaseDate'].dt.date.apply(lambda x: (recent_date - x).days)
+        recency['Recency'] = recency['LastPurchaseDate'].dt.date.apply(
+            lambda x: (recent_date - x).days)
         return recency[['customer_unique_id', 'Recency']]
 
     def calculate_frequency(self):
-        frequency = self.df_data.groupby(["customer_unique_id"]).agg({"order_id": "nunique"}).reset_index()
+        frequency = self.df_data.groupby(["customer_unique_id"]).agg(
+            {"order_id": "nunique"}).reset_index()
         frequency.rename(columns={'order_id': 'Frequency'}, inplace=True)
         return frequency
 
     def calculate_monetary(self):
-        monetary = self.df_data.groupby('customer_unique_id', as_index=False)['payment_value'].sum()
+        monetary = self.df_data.groupby('customer_unique_id', as_index=False)[
+            'payment_value'].sum()
         monetary.rename(columns={'payment_value': 'Monetary'}, inplace=True)
         return monetary
 
@@ -80,7 +89,8 @@ class RFMAnalysis:
         rfm['frequency_label'] = rfm['Frequency'].apply(frequency_label)
 
         # Create RFM rank and rank_rm columns
-        rfm['Rank'] = list(zip(rfm['recency_label'], rfm['monetary_label'], rfm['frequency_label']))
+        rfm['Rank'] = list(
+            zip(rfm['recency_label'], rfm['monetary_label'], rfm['frequency_label']))
         rfm['rank_rm'] = list(zip(rfm['recency_label'], rfm['monetary_label']))
 
         return rfm
