@@ -75,7 +75,7 @@ class SellersTable:
 
     def clean(self, df):
         cleaned_df = pd.merge(df, self.df_sellers, on="seller_id", how="left")
-        cleaned_df= cleaned_df['seller_state'].map(state_dict)
+        cleaned_df['seller_state']= cleaned_df['seller_state'].map(state_dict)
         cleaned_df.to_csv('data/cleaned_sellers.csv', index=False)
         return cleaned_df
 

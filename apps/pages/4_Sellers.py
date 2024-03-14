@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from script.sellers import SellersTable
 from script.gold.gold_sellers import KpiSellers
 
 st.set_page_config(page_title='Sellers', layout='wide')
