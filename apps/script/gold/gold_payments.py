@@ -154,3 +154,33 @@ class KpiCalculator:
             raise ValueError("Invalid period. Please use 'year'.")
 
         return revenues, orders
+    def nb_delay_orders(self):
+        # Filter out canceled orders
+        filtered_data = self.data[self.data['order_status'] != 'canceled']
+        filtered_data['order_purchase_timestamp'] = pd.to_datetime(filtered_data['order_purchase_timestamp'])
+        filtered_data['order_approved_at'] = pd.to_datetime(filtered_data['order_approved_at'])
+        filtered_data['order_delivered_carrier_date'] = pd.to_datetime(filtered_data['order_delivered_carrier_date'])
+        filtered_data['order_delivered_customer_date'] = pd.to_datetime(filtered_data['order_delivered_customer_date'])
+        filtered_data['order_estimated_delivery_date'] = pd.to_datetime(filtered_data['order_estimated_delivery_date'])
+        filtered_data['delay'] = (filtered_data['order_delivered_customer_date'] - filtered_data['order_estimated_delivery_date']).dt.days
+        return filtered_data[filtered_data['delay'] > 0]
+    def stat_on_delay_orders(self):
+        # Filter out canceled orders
+        filtered_data = self.data[self.data['order_status'] != 'canceled']
+        filtered_data['order_purchase_timestamp'] = pd.to_datetime(filtered_data['order_purchase_timestamp'])
+        filtered_data['order_approved_at'] = pd.to_datetime(filtered_data['order_approved_at'])
+        filtered_data['order_delivered_carrier_date'] = pd.to_datetime(filtered_data['order_delivered_carrier_date'])
+        filtered_data['order_delivered_customer_date'] = pd.to_datetime(filtered_data['order_delivered_customer_date'])
+        filtered_data['order_estimated_delivery_date'] = pd.to_datetime(filtered_data['order_estimated_delivery_date'])
+        filtered_data['delay'] = (filtered_data['order_delivered_customer_date'] - filtered_data['order_estimated_delivery_date']).dt.days
+        return filtered_data[filtered_data['delay'] > 0]['delay'].describe()
+    def stat_on_delay_orders_over_time(self):
+        # Filter out canceled orders
+        filtered_data = self.data[self.data['order_status'] != 'canceled']
+        filtered_data['order_purchase_timestamp'] = pd.to_datetime(filtered_data['order_purchase_timestamp'])
+        filtered_data['order_approved_at'] = pd.to_datetime(filtered_data['order_approved_at'])
+        filtered_data['order_delivered_carrier_date'] = pd.to_datetime(filtered_data['order_delivered_carrier_date'])
+        filtered_data['order_delivered_customer_date'] = pd.to_datetime(filtered_data['order_delivered_customer_date'])
+        filtered_data['order_estimated_delivery_date'] = pd.to_datetime(filtered_data['order_estimated_delivery_date'])
+        filtered_data['delay'] = (filtered_data['order_delivered_customer_date'] - filtered_data['order_estimated_delivery_date']).dt.days
+        return filtered_data[filtered_data['delay'] > 0].groupby(filtered_data['order_purchase_timestamp'].dt.to_period("M"))['delay'].describe()
