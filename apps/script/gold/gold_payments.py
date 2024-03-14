@@ -10,7 +10,7 @@ class KpiCalculator:
 # Compare this snippet from apps/script/gold/gold_payments.py:
     def best_region(self):
         sales_per_state = self.data.groupby('customer_state')['payment_value'].sum().reset_index()
-        sales_per_state=sales_per_state.sort_values(by='payment_value', ascending=False)
+        sales_per_state=sales_per_state.sort_values(by='payment_value', ascending=True)
         sales_per_state['payment_value']=sales_per_state['payment_value'].map("R${:,.0f}".format)
         return {'Sales per state': sales_per_state}
     def must_customer_region(self):
