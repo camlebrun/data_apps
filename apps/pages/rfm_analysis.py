@@ -99,7 +99,7 @@ rfm_data_with_labels['RFM_Segment'] = rfm_data_with_labels['RFM_Segment'].astype
 
 # Displaying the results
 st.dataframe(rfm_data_with_labels, use_container_width=True)
-with st.expander("RFM Label Calculation", expanded=True):
+with st.expander("RFM Label Calculation", expanded=False):
     st.markdown("""
     This function computes RFM labels for each customer based on their Recency, Frequency, and Monetary (RFM) values. 
     Here's how it works:
