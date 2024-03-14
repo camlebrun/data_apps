@@ -15,6 +15,7 @@ calculator = KpiCalculator('data/cleaned_payments.csv')
 # Custom page names in the sidebar
 selected_page = st.sidebar.radio("Go to",
                                  ["Orders over Time",
+                                  "Sales per Category",
                                   "Delayed Orders",
                                   "Average Delay by State",
                                   "Statistics on Delayed Orders",
@@ -42,6 +43,24 @@ if selected_page == "Orders over Time":
 
     # Display the plot in Streamlit
     st.plotly_chart(fig_order_count, use_container_width=True)
+elif selected_page == "Sales per Category":
+    st.header('Sales per Categories')
+    sales_per_categories = pd.read_csv('data/cat_sales.csv')
+    
+    # Grouping data by category and summing up sales value
+    sales_per_category = sales_per_categories.groupby('custom_category')['payment_value_y'].sum().reset_index()
+
+    fig = px.pie(sales_per_category,
+                 values='payment_value_y',
+                 names='custom_category',
+                 title='Sales Distribution per Category',
+                 )
+    fig.update_traces(textinfo='percent+label')  # Displaying percentage and label on the chart
+    fig.update_layout(title_x=0.5)  # Centering the title
+    
+    st.plotly_chart(fig, use_container_width=True)
+
+
 
 elif selected_page == "Delayed Orders":
     st.header('Delayed Orders')

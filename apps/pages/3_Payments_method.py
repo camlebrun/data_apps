@@ -13,7 +13,6 @@ st.write(
     unsafe_allow_html=True
 )
 
-sapersa=pd.read_csv('data/cat_sales.csv')
 calculator = KpiCalculator('data/cleaned_payments.csv')
 
 # Function to convert payment type string to human-readable format
@@ -89,38 +88,4 @@ fig = px.pie(
 st.plotly_chart(fig, use_container_width=True)
 
 
-# Displaying Sales per State as a bar chart
-st.header('Sales per state')
-result = calculator.best_region()
-sales_per_state = result['Sales per state']
-sales_per_state = sales_per_state.sort_values(
-    by='payment_value', ascending=True)  # Sort in ascending order
-fig = px.bar(
-    sales_per_state,
-    x='customer_state',
-    y='payment_value',
-    title='Sales per State',
-    labels={
-        'payment_value': 'Payment Value'})
-st.plotly_chart(fig, use_container_width=True)
-
-# Displaying Sales per categories as a bar chart
-st.header('Sales per Categories')
-sales_per_categories=sapersa
-#st.write(sales_per_categories)
-fig = px.bar(sales_per_categories, x='custom_category', y='payment_value_y', title='Total Sales per Category')
-st.plotly_chart(fig)
-
-
-# Displaying Customers per State as a bar chart
-st.header('Customers per state')
-result = calculator.must_customer_region()
-customers_per_state = result['Customers per state']
-fig = px.bar(
-    customers_per_state,
-    x=customers_per_state.index,
-    y='Customers_per_states',
-    title='Customers per State',
-    labels={
-        'Customers_per_states': 'Number of Customers'})
-st.plotly_chart(fig, use_container_width=True)
+#

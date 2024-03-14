@@ -134,6 +134,7 @@ fig_customers_per_state = px.bar(
     y='Customers_per_states',
     labels={
         'Customers_per_states': 'Number of Customers'})
+
 col1, col2 = st.columns(2)
 with col1:
     st.markdown(
@@ -145,6 +146,7 @@ with col2:
         '<h3 style="text-align: center;">Customers per State</h3>',
         unsafe_allow_html=True)
     st.plotly_chart(fig_customers_per_state, use_container_width=True)
+    
 
 regions = sales_per_state['customer_state'].unique()
 # Select a region
