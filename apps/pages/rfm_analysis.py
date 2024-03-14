@@ -4,6 +4,7 @@ import plotly.express as px
 from script.gold.rfm import RFMAnalysis
 
 st.set_page_config(page_title='RFM Analysis', layout='wide')
+
 # Load the data
 df = pd.read_csv('data/cleaned_payments.csv')
 
@@ -11,6 +12,7 @@ df = pd.read_csv('data/cleaned_payments.csv')
 st.title('RFM Analysis Dashboard')
 st.write('Welcome to the RFM Analysis Dashboard! This dashboard provides insights into customer behavior based on Recency, Frequency, and Monetary (RFM) analysis.')
 st.info('RFM analysis is a marketing technique used to determine quantitatively which customers are the best ones by examining how recently a customer has purchased (Recency), how often they purchase (Frequency), and how much the customer spends (Monetary).' )
+
 # Sidebar
 st.sidebar.title('Options')
 export_button = st.sidebar.button('Export RFM data to CSV')
@@ -56,11 +58,9 @@ with col3_box:
 st.header('Top 10 Customers for each RFM')
 st.write('Here are the top 10 customers based on Recency, Frequency, and Monetary.')
 
-
 top_recency = rfm_result.sort_values(by='Recency').head(10)
 top_frequency = rfm_result.sort_values(by='Frequency', ascending=False).head(10)
 top_monetary = rfm_result.sort_values(by='Monetary', ascending=False).head(10)
-
 
 with col1:
     st.write('### Recency Distribution (R)')
@@ -129,8 +129,27 @@ with st.expander("RFM Label Calculation", expanded=False):
     The resulting DataFrame includes these RFM labels and rankings for further analysis and segmentation of customers.
     """)
 
-
 # Export RFM data
 if export_button:
     rfm_result.to_csv('rfm_analysis_result.csv', index=False)
     st.success('RFM data exported successfully to CSV format.')
+
+# Search functionality to find the best customers according to RFM criteria
+st.header('Search for the best customers')
+selected_params = st.multiselect('Select RFM parameters:', ['Recency', 'Frequency', 'Monetary'])
+
+if selected_params:
+    search_results = rfm_data_with_labels.copy()
+    for param in selected_params:
+        if param == 'Recency':
+            recency_labels = st.multiselect('Select Recency labels:', ['1', '2', '3', '4'], default=['4'])
+            search_results = search_results[search_results['recency_label'].astype(str).isin(recency_labels)]
+        elif param == 'Frequency':
+            frequency_labels = st.multiselect('Select Frequency labels:', ['1', '2', '3', '4'], default=['4'])
+            search_results = search_results[search_results['frequency_label'].astype(str).isin(frequency_labels)]
+        elif param == 'Monetary':
+            monetary_labels = st.multiselect('Select Monetary labels:', ['1', '2', '3', '4'], default=['4'])
+            search_results = search_results[search_results['monetary_label'].astype(str).isin(monetary_labels)]
+    
+    st.subheader("Search Results:")
+    st.dataframe(search_results)

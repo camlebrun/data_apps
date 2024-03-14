@@ -183,4 +183,4 @@ class KpiCalculator:
         filtered_data['order_delivered_customer_date'] = pd.to_datetime(filtered_data['order_delivered_customer_date'])
         filtered_data['order_estimated_delivery_date'] = pd.to_datetime(filtered_data['order_estimated_delivery_date'])
         filtered_data['delay'] = (filtered_data['order_delivered_customer_date'] - filtered_data['order_estimated_delivery_date']).dt.days
-        return filtered_data[filtered_data['delay'] > 0].groupby(filtered_data['order_purchase_timestamp'].dt.to_period("M"))['delay'].describe()
+        return filtered_data[filtered_data['delay'] > 0].groupby(filtered_data['order_purchase_timestamp'].dt.to_period("M"))['delay'].median()

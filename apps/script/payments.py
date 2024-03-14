@@ -1,6 +1,37 @@
 import pandas as pd
 import os
 
+# Define the state dictionary
+state_dict = {
+    'SP': 'São Paulo',
+    'RN': 'Rio Grande do Norte',
+    'AC': 'Acre',
+    'RJ': 'Rio de Janeiro',
+    'ES': 'Espírito Santo',
+    'MG': 'Minas Gerais',
+    'BA': 'Bahia',
+    'SE': 'Sergipe',
+    'PE': 'Pernambuco',
+    'AL': 'Alagoas',
+    'PB': 'Paraíba',
+    'CE': 'Ceará',
+    'PI': 'Piauí',
+    'MA': 'Maranhão',
+    'PA': 'Pará',
+    'AP': 'Amapá',
+    'AM': 'Amazonas',
+    'RR': 'Roraima',
+    'DF': 'Distrito Federal',
+    'GO': 'Goiás',
+    'RO': 'Rondônia',
+    'TO': 'Tocantins',
+    'MT': 'Mato Grosso',
+    'MS': 'Mato Grosso do Sul',
+    'RS': 'Rio Grande do Sul',
+    'PR': 'Paraná',
+    'SC': 'Santa Catarina'
+}
+
 class CleanPayments:
     def __init__(self, payments_path='data/olist_order_payments_dataset.csv', last_index_file='last_index_payments.txt'):
         self.df_payments = pd.read_csv(payments_path)
@@ -37,8 +68,7 @@ class CleanPayments:
             new_data = pd.DataFrame()
         return new_data
 
-    @staticmethod
-    def clean(df):
+    def clean(self, df):
         # Filter DataFrame for voucher payments
         voucher_payments = df[df['payment_type'] == 'voucher']
 
@@ -60,6 +90,9 @@ class CleanPayments:
         df_customers = pd.read_csv('data/olist_customers_dataset.csv')
         df = pd.merge(df, df_customers, on="customer_id", how="left")
 
+        # Map customer states to their full names
+        df['customer_state'] = df['customer_state'].map(state_dict)
+
         # Group by order_id and aggregate other columns
         final_df = df.groupby('order_id').agg({
             'customer_id': 'first',
@@ -77,10 +110,9 @@ class CleanPayments:
             'customer_city': 'first',
             'customer_state': 'first'
         }).reset_index()
+
         final_df.to_csv('data/cleaned_payments.csv', index=False)
         return final_df
-
-
 
 if __name__ == "__main__":
     clean_payments = CleanPayments()

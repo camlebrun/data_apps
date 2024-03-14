@@ -44,26 +44,6 @@ class SellersTable:
         cleaned_df.to_csv('data/cleaned_sellers.csv', index=False)
         return cleaned_df
 
-    @staticmethod
-    def kpi(df):
-        df = pd.read_csv('data/cleaned_sellers.csv')
-        total_sellers = len(df['seller_id'].unique())
-        total_items = len(df)
-        average_items_per_seller = df.groupby('seller_id').size().mean().astype(int)
-        count_seller = df['seller_id'].value_counts().sort_values(ascending=False).head(10)
-        sum_price = df.groupby('seller_state')['price'].sum()
-        count_seller_state = df['seller_state'].value_counts().sort_values(ascending=False).head(1000)
-        count_seller_city = df['seller_city'].value_counts().sort_values(ascending=False).head(1000)
-
-        return {
-            'Total Sellers': total_sellers,
-            'Total Items': total_items,
-            'Average Items per Seller': average_items_per_seller,
-            'Count seller': count_seller,
-            'Sum price': sum_price,
-            'Count seller state': count_seller_state,
-            'Count seller city': count_seller_city
-        }
 
 if __name__ == "__main__":
     sellers_table = SellersTable()
