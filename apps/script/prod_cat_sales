@@ -40,15 +40,8 @@ class ProdCatSales:
       #Getting rid of the NaN
         prod_cat_sales_viz_clean=prod_cat_sales_viz.dropna()
 
-      #Merging with the customers_with_complete to have an outlook of the sales next to the category
-
-        prod_cat_ord = pd.merge(customers_with_complete, prod_cat_sales_viz_clean, left_on='order_id', right_on='order_id')
-
-      
-        return prod_cat_ord
-    @staticmethod
-    def kpi(df):
-
+    #Creating custom cat
+        
         custom_categories = {
     'Beauty': ['perfumaria', 'beleza_saude', 'cool_stuff', 'fashion_bolsas_e_acessorios', 'relogios_presentes'],
     'Home,Tools and Decoration': ['construcao_ferramentas_iluminacao','construcao_ferramentas_jardim','construcao_ferramentas_seguranca','sinalizacao_e_seguranca','artigos_de_festas','construcao_ferramentas_ferramentas','construcao_ferramentas_construcao','casa_conforto','moveis_cozinha_area_de_servico_jantar_e_jardim','moveis_sala','la_cuisine','utilidades_domesticas','artigos_de_natal','moveis_colchao_e_estofado','artes_e_artesanato','moveis_escritorio','ferramentas_jardim','artes','moveis_decoracao','flores','cama_mesa_banho', 'utilidades_domesticas', 'casa_construcao', 'casa_conforto','casa_conforto_2','portateis_cozinha_e_preparadores_de_alimentos'],
@@ -64,23 +57,27 @@ class ProdCatSales:
         }
 
       # Create a function to map custom categories to original categories
-      def map_custom_category(category):
-          for custom_category, categories in custom_categories.items():
-              if category in categories:
-                  return custom_category
-          return 'Other'  # Default category if no match found
+        def map_custom_category(category):
+            for custom_category, categories in custom_categories.items():
+                if category in categories:
+                    return custom_category
+            
+                return 'Other'  # Default category if no match found
+        #Merging with the customers_with_complete to have an outlook of the sales next to the category
+
+        prod_cat_ord = pd.merge(customers_with_complete, prod_cat_sales_viz_clean, left_on='order_id', right_on='order_id')
+         # Apply the function to create a new column with custom categories
+        prod_cat_ord['custom_category'] = prod_cat_ord['product_category_name'].apply(map_custom_category)
       
-      # Apply the function to create a new column with custom categories
-     prod_cat_ord['custom_category'] = prod_cat_ord['product_category_name'].apply(map_custom_category)
       
+        return prod_cat_ord
+    @staticmethod
+    def kpi(df):
+
+      
+     
       # Group by custom category and count the number of occurrences
       #grouped_counts = prod_cat_ord.groupby('custom_category').size().reset_index(name='count')
 
-      ae=prod_cat_ord.groupby('custom_category')['payment_value_y'].sum().reset_index()
-      ae.sort_values(by='payment_value_y',ascending=False)
-      
-
-
-
-
-        return {'Order Sales Per Category':ae )}
+        ae=prod_cat_ord.groupby('custom_category')['payment_value_y'].sum().reset_index()
+        ae.sort_values(by='payment_value_y',ascending=False)
