@@ -13,7 +13,7 @@ st.write(
     unsafe_allow_html=True
 )
 
-
+sapersa=pd.read_csv('data/cat_sales.csv')
 calculator = KpiCalculator('data/cleaned_payments.csv')
 
 # Function to convert payment type string to human-readable format
@@ -103,6 +103,13 @@ fig = px.bar(
     labels={
         'payment_value': 'Payment Value'})
 st.plotly_chart(fig, use_container_width=True)
+
+# Displaying Sales per categories as a bar chart
+st.header('Sales per Categories')
+sales_per_categories=sapersa
+#st.write(sales_per_categories)
+fig = px.bar(sales_per_categories, x='custom_category', y='payment_value_y', title='Total Sales per Category')
+st.plotly_chart(fig)
 
 
 # Displaying Customers per State as a bar chart
