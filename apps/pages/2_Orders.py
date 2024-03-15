@@ -11,10 +11,8 @@ st.markdown(
     unsafe_allow_html=True)
 
 # Creation d'un plot pour la geolocalisation
-geolocation = pd.read_csv('data/olist_geolocation_dataset.csv')
-data = geolocation
-st.header('Orders per Region')
-st.map(data, latitude='geolocation_lat', longitude='geolocation_lng', use_container_width=True)
+
+
 
 calculator = KpiCalculator('data/cleaned_payments.csv')
 
@@ -22,6 +20,7 @@ calculator = KpiCalculator('data/cleaned_payments.csv')
 selected_page = st.sidebar.radio("Go to",
                                  ["Orders over Time",
                                   "Sales per Category",
+                                  "Map of Orders per Region",
                                   "Delayed Orders",
                                   "Average Delay by State",
                                   "Statistics on Delayed Orders",
@@ -71,6 +70,13 @@ elif selected_page == "Sales per Category":
 elif selected_page == "Delayed Orders":
     st.header('Delayed Orders')
     st.dataframe(calculator.nb_delay_orders(), use_container_width=True)
+elif selected_page == "Map of Orders per Region":
+    geolocation = pd.read_csv('data/olist_geolocation_dataset.csv')
+    data = geolocation
+    st.header('Map of Orders per Region')
+    st.write('The map above shows the distribution of orders per region.')
+    st.map(data, latitude='geolocation_lat', longitude='geolocation_lng', use_container_width=True)
+    
 
 elif selected_page == "Average Delay by State":
     st.header('Average Delay by State')
