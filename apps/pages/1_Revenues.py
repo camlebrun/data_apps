@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from script.gold.gold_payments import KpiCalculator
+from script.gold.gold_revenues import KpiCalculator
 
 
 st.set_page_config(page_title='Revenues', layout='wide')

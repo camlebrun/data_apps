@@ -1,5 +1,5 @@
 import streamlit as st
-from script.gold.gold_payments import KpiCalculator
+from script.gold.gold_revenues import KpiCalculator
 import pandas as pd
 
 # Function to calculate metrics and display them
