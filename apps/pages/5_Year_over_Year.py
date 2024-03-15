@@ -32,18 +32,23 @@ def calculate_and_display_metrics(start_date, end_date):
     percentage_order_diff = (order_diff / order_start_date) * \
         100 if order_start_date != 0 else 0
 
+    if (end_date - start_date).days < 365:
+        st.error("Error: End date - Start date must be greater than 1 year")
+    else:
+        col1, col2 = st.columns(2)
+        with col1:
+            st.write('### Revenue')
+            st.metric(label=f" {end_date} VS {start_date}",
+                      value=revenue_diff,
+                      delta=f"{percentage_revenue_diff:.2f}%")
+        with col2:
+            st.write('### Orders')
+            st.metric(label=f" {end_date} VS {start_date}",
+                      value=order_diff,
+                      delta=f"{percentage_order_diff:.2f}%")
+        return
     # Display metrics with difference and percentage difference
-    col1, col2 = st.columns(2)
-    with col1:
-        st.write('### Revenue')
-        st.metric(label=f" {end_date} VS {start_date}",
-                  value=revenue_diff,
-                  delta=f"{percentage_revenue_diff:.2f}%")
-    with col2:
-        st.write('### Orders')
-        st.metric(label=f" {end_date} VS {start_date}",
-                  value=order_diff,
-                  delta=f"{percentage_order_diff:.2f}%")
+
 
 # Main function
 

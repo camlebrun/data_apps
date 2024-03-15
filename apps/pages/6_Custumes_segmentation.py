@@ -3,19 +3,19 @@ import pandas as pd
 import plotly.express as px
 from script.gold.rfm import RFMAnalysis
 
-st.set_page_config(page_title='RFM Analysis', layout='wide')
+st.set_page_config(page_title='Customer segmentation', layout='wide')
 
 # Load the data
 df = pd.read_csv('data/cleaned_payments.csv')
 
 # Introduction
-st.title('RFM Analysis Dashboard')
-st.write('Welcome to the RFM Analysis Dashboard! This dashboard provides insights into customer behavior based on Recency, Frequency, and Monetary (RFM) analysis.')
+st.title('Customer segmentation')
+st.write('Welcome to the Customer segmentation! This dashboard provides insights into customer behavior based on Recency, Frequency, and Monetary (RFM) analysis.')
 st.info('RFM analysis is a marketing technique used to determine quantitatively which customers are the best ones by examining how recently a customer has purchased (Recency), how often they purchase (Frequency), and how much the customer spends (Monetary).')
 
 # Sidebar
 st.sidebar.title('Options')
-export_button = st.sidebar.button('Export RFM data to CSV')
+export_button = st.sidebar.button('Export Customer segmentation data to CSV')
 
 # Use the RFMAnalysis class to perform RFM analysis
 rfm_analysis = RFMAnalysis(df)
@@ -158,7 +158,7 @@ if export_button:
 # vizualization of RFM segments using a treemap
 st.header('RFM Segmentation')
 st.write('Cluster analysis is a type of data classification carried out by separating the data into groups. In this case, we are segmenting customers into different groups based on their RFM values.')
-fig =px.scatter(rfm_data_with_labels, x='Recency', y='Frequency', color='RFM_Segment', title='RFM Segments')
+fig =px.scatter(rfm_data_with_labels, x='Recency', y='Monetary', color='RFM_Segment', title='RFM Segments')
 st.plotly_chart(fig, use_container_width=True)
 
 
