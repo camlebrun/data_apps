@@ -176,6 +176,49 @@ class KpiCalculator:
             raise ValueError("Invalid period. Please use 'year'.")
 
         return revenues
+    def revenues_per_custom_period_month(self, period='month', start=None, end=None):
+        # Filter out canceled orders and ensure 'order_purchase_timestamp' is
+        # in datetime format
+        filtered_data = self.data[self.data['order_status'] != 'canceled']
+        filtered_data['order_purchase_timestamp'] = pd.to_datetime(
+            filtered_data['order_purchase_timestamp'])
+
+        # Set start and end dates if provided
+        if start:
+            filtered_data = filtered_data[filtered_data['order_purchase_timestamp'] >= pd.to_datetime(
+                start)]
+        if end:
+            filtered_data = filtered_data[filtered_data['order_purchase_timestamp'] <= pd.to_datetime(
+                end)]
+
+        # Group by month and sum payment values
+        if period == 'month':
+            revenues = filtered_data.groupby(
+                filtered_data['order_purchase_timestamp'].dt.to_period("M"))['payment_value'].sum()
+        else:
+            raise ValueError("Invalid period. Please use 'month'.")
+
+        return revenues
+    def orders_per_custom_period_month(self, period='month', start=None, end=None):
+        # Filter out canceled orders and ensure 'order_purchase_timestamp' is in datetime format
+        filtered_data = self.data[self.data['order_status'] != 'canceled']
+        filtered_data['order_purchase_timestamp'] = pd.to_datetime(
+            filtered_data['order_purchase_timestamp'])
+
+        # Set start and end dates if provided
+        if start:
+            filtered_data = filtered_data[filtered_data['order_purchase_timestamp'] >= pd.to_datetime(start)]
+        if end:
+            filtered_data = filtered_data[filtered_data['order_purchase_timestamp'] <= pd.to_datetime(end)]
+
+        # Group by month and count the number of orders
+        if period == 'month':
+            orders = filtered_data.groupby(
+                filtered_data['order_purchase_timestamp'].dt.to_period("M")).size()
+        else:
+            raise ValueError("Invalid period. Please use 'month'.")
+
+        return orders
 
     def revenues_and_orders_per_custom_period(
             self, period='year', start=None, end=None):
@@ -203,6 +246,7 @@ class KpiCalculator:
             raise ValueError("Invalid period. Please use 'year'.")
 
         return revenues, orders
+
 
     def nb_delay_orders(self):
         # Filter out canceled orders
