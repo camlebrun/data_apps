@@ -155,6 +155,13 @@ if export_button:
     rfm_result.to_csv('rfm_analysis_result.csv', index=False)
     st.success('RFM data exported successfully to CSV format.')
 
+# vizualization of RFM segments using a treemap
+st.header('RFM Segmentation')
+st.write('Cluster analysis is a type of data classification carried out by separating the data into groups. In this case, we are segmenting customers into different groups based on their RFM values.')
+fig =px.scatter(rfm_data_with_labels, x='Recency', y='Frequency', color='RFM_Segment', title='RFM Segments')
+st.plotly_chart(fig, use_container_width=True)
+
+
 # Search functionality to find the best customers according to RFM criteria
 st.header('Search for the best customers')
 selected_params = st.multiselect(
